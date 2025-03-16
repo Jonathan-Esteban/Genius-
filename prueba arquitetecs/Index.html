@@ -1,0 +1,62 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { FaPlus, FaCog, FaUser, FaInfoCircle } from "react-icons/fa";
+
+export default function InteractiveUI() {
+  const [showOptions, setShowOptions] = useState(false);
+
+  return (
+    <div className="relative min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex flex-col items-center justify-center text-white">
+      <header className="text-center mb-12">
+        <h1 className="text-4xl font-bold">Bienvenido a la Interfaz Interactiva</h1>
+        <p className="text-lg mt-2">Explora las diferentes opciones y disfruta la experiencia.</p>
+      </header>
+      
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+        {["Opción 1", "Opción 2", "Opción 3", "Opción 4"].map((text, index) => (
+          <motion.div 
+            key={index} 
+            whileHover={{ scale: 1.1 }} 
+            className="bg-white text-gray-800 p-6 rounded-2xl shadow-lg flex justify-center items-center font-semibold cursor-pointer"
+          >
+            {text}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Botón flotante con animación */}
+      <div className="fixed bottom-10 right-10 flex flex-col items-center">
+        {showOptions && (
+          <div className="flex flex-col mb-3 space-y-3">
+            <motion.button 
+              whileHover={{ scale: 1.1 }} 
+              className="bg-gray-800 p-4 rounded-full text-white shadow-md"
+            >
+              <FaUser size={20} />
+            </motion.button>
+            <motion.button 
+              whileHover={{ scale: 1.1 }} 
+              className="bg-gray-800 p-4 rounded-full text-white shadow-md"
+            >
+              <FaCog size={20} />
+            </motion.button>
+            <motion.button 
+              whileHover={{ scale: 1.1 }} 
+              className="bg-gray-800 p-4 rounded-full text-white shadow-md"
+            >
+              <FaInfoCircle size={20} />
+            </motion.button>
+          </div>
+        )}
+        
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setShowOptions(!showOptions)}
+          className="bg-blue-600 p-5 rounded-full text-white shadow-lg flex items-center justify-center"
+        >
+          <FaPlus size={24} />
+        </motion.button>
+      </div>
+    </div>
+  );
+}
