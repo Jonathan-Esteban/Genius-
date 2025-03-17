@@ -82,20 +82,27 @@ tool.Activated:Connect(function()
 		warn("No se encontró HitTrack")
 	end
 
-	-- Reproducir sonido cuando la animación llega al marcador "Hit"
-	HitTrack:GetMarkerReachedSignal("Hit"):Connect(function()
-		print("Marcador de animación 'Hit' alcanzado, reproduciendo sonido")
-		if HitSound then
-			HitSound:Play()
-		else
-			warn("HitSound no encontrado.")
+	-- 🔥 Activar partículas en el momento exacto del ataque
+	for _, effect in pairs(Blade:GetChildren()) do
+		if effect:IsA("ParticleEmitter") then
+			effect.Enabled = true -- Activar partículas
+			effect:Emit(5) -- Emitir partículas en el golpe
 		end
-	end)
+	end
+
+	-- ⏳ Esperar un momento y desactivar partículas nuevamente
+	task.wait(0.2)
+	for _, effect in pairs(Blade:GetChildren()) do
+		if effect:IsA("ParticleEmitter") then
+			effect.Enabled = false -- Desactivar partículas
+		end
+	end
 
 	task.wait(0.5)
 	debounce = false
 	IdleTrack:Play()
 end)
+
 
 -- 🛠 **Nuevo Código para Detectar Golpes y Enviar al Servidor**
 Blade.Touched:Connect(function(hit)
