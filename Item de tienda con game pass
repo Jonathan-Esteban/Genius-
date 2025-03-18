@@ -1,0 +1,53 @@
+local Players = game:GetService("Players")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local player = Players.LocalPlayer 
+repeat wait() until player 
+
+--------- Sonidos ---------
+local CarpetaSonidos = script.Parent.Parent.Sonidos
+local ComprarSFX = CarpetaSonidos.Comprar
+local YaObtenido = CarpetaSonidos.YaLoTienes
+local Seleccion = CarpetaSonidos.Seleccionado
+
+--------- UI ---------
+local Boton = script.Parent.TextButton
+local Precio = script.Parent.Precio
+
+local DescripcionItem = script.Parent.Parent.Parent.Info.Descripcion
+local ToolIcon = script.Parent.Parent.Parent.Info.ITEM
+local ToolNameInfo = script.Parent.Parent.Parent.Info.Nombre
+local PrecioInfo = script.Parent.Parent.Parent.Info.Precio
+
+--------- Datos del Game Pass ---------
+local GAMEPASS_ID = 13600173502 -- 🔹 Cambia esto por el ID de tu Game Pass
+local DESCRIPCION = "Nada dice 'discusión civilizada' como dos personas tratando de apuñalarse mutuamente con un trozo de acero afilado."
+local ImagenIcono = "rbxassetid://17753344129"
+local NombreArmaINFO = "Espada"
+
+-- 🔹 Verifica si el jugador ya tiene el Game Pass
+local function TieneGamePass(player)
+	return MarketplaceService:UserOwnsGamePassAsync(player.UserId, GAMEPASS_ID)
+end
+
+-- 🔹 Evento de clic en el botón para comprar
+Boton.MouseButton1Click:Connect(function()
+	if TieneGamePass(player) then
+		YaObtenido:Play()
+		Boton.Text = "¡Ya lo tienes!"
+		wait(2)
+		Boton.Text = "Comprar"
+	else
+		MarketplaceService:PromptGamePassPurchase(player, GAMEPASS_ID)
+		ComprarSFX:Play()
+	end
+end)
+
+-- 🔹 Al pasar el mouse sobre el botón, muestra información
+Boton.MouseEnter:Connect(function()
+	Seleccion:Play()
+	ToolIcon.Image = ImagenIcono
+	DescripcionItem.Text = DESCRIPCION
+	ToolNameInfo.Text = NombreArmaINFO
+	PrecioInfo.Text = "Precio: ROBUX" -- 🔹 No usamos el precio en dinero del juego
+end)
